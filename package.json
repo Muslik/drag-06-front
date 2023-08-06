@@ -1,0 +1,45 @@
+{
+  "name": "drag-06",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint \"src/**/*.{js,mjs,cjs,ts,mts,jsx,tsx}\"",
+    "preview": "vite preview",
+    "lint:fix": "eslint \"src/**/*.{js,mjs,cjs,ts,mts,jsx,tsx}\" --fix",
+    "format": "prettier --write \"./src/**/**.{ts,tsx,js,jsx,json}\"",
+    "commit": "commit"
+  },
+  "dependencies": {
+    "clsx": "^2.0.0",
+    "effector": "^22.8.6",
+    "effector-react": "^22.5.3",
+    "patronum": "^1.19.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
+    "@commitlint/prompt-cli": "^17.6.7",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.3",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^8.41.0",
+    "eslint-kit": "^10.0.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.3",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  },
+  "engines": {
+    "node": "18.14.0",
+    "npm": "9.8.0"
+  }
+}
