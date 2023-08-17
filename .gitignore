@@ -1,5 +1,6 @@
 # Logs
 logs
+.env
 *.log
 .yarn
 npm-debug.log*
