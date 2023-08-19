@@ -40,10 +40,7 @@ async function clientRequest<Response = unknown>({
     headers: toObject(response.headers),
   };
 
-  if (response.ok) {
-    return responder;
-  }
-  throw responder;
+  return responder;
 }
 
 /**

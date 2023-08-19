@@ -1,4 +1,4 @@
-import { useStore } from 'effector-react/ssr';
+import { useUnit } from 'effector-react';
 import { ReactNode } from 'react';
 
 import { $isAuthenticated } from '@drag/entities/session';
@@ -9,7 +9,7 @@ type Props = {
 };
 
 export const ShowOnly = ({ when, children }: Props) => {
-  const isAuthorized = useStore($isAuthenticated);
+  const isAuthorized = useUnit($isAuthenticated);
   const shouldShow = (when === 'authorized') === isAuthorized;
 
   if (!shouldShow) {

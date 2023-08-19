@@ -1,9 +1,9 @@
-import { useStore } from 'effector-react/ssr';
+import { useUnit } from 'effector-react';
 
 import { $session } from '@drag/entities/session';
 
 export const SessionUser = () => {
-  const sessionUser = useStore($session);
+  const sessionUser = useUnit($session);
 
   if (!sessionUser) {
     return null;

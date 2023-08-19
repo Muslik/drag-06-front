@@ -1,7 +1,7 @@
 import GoogleIcon from '@mui/icons-material/Google';
 import { Button } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useEvent } from 'effector-react/ssr';
+import { useUnit } from 'effector-react';
 import { useState } from 'react';
 import { GoogleLogin } from 'react-google-login';
 
@@ -11,7 +11,7 @@ import { env } from '@drag/shared/config';
 export const LoginGoogleButton = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = useEvent(loginGoogleDone);
+  const handleLogin = useUnit(loginGoogleDone);
 
   const handleToggleLoading = () => setIsLoading((is) => !is);
 

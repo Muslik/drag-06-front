@@ -1,11 +1,11 @@
 import { Avatar } from '@mui/material';
-import { useStore } from 'effector-react/ssr';
+import { useUnit } from 'effector-react';
 
 import { $session } from '@drag/entities/session';
 import { generateAvatarInitials } from '@drag/entities/session/lib';
 
 export const UserAvatar = () => {
-  const session = useStore($session);
+  const session = useUnit($session);
 
   if (!session) {
     return null;
