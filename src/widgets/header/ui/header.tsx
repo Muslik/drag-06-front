@@ -1,19 +1,12 @@
 import { Logout } from '@mui/icons-material';
-import {
-  AppBar,
-  IconButton,
-  ListItemIcon,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { AppBar, IconButton, ListItemIcon, Menu, MenuItem, Toolbar } from '@mui/material';
 import { useUnit } from 'effector-react';
 import { useState } from 'react';
 
 import { UserAvatar, ShowOnly } from '@drag/entities/session';
 import { LoginGoogleButton } from '@drag/features/auth/loginGoogle';
 import { logout } from '@drag/features/auth/logout';
+import { Logo } from '@drag/shared/ui';
 
 export const Header = () => {
   const [anchorElement, setAnchorElement] = useState<null | HTMLElement>(null);
@@ -29,15 +22,8 @@ export const Header = () => {
 
   return (
     <AppBar position="static">
-      <Toolbar>
-        <Typography
-          variant="h6"
-          component="a"
-          sx={{ flexGrow: 1, textDecoration: 'none', color: '#fff' }}
-          href="/"
-        >
-          Drag06
-        </Typography>
+      <Toolbar className="flex justify-between py-4">
+        <Logo href="/" isInverted={true} />
         <ShowOnly when="anonymous">
           <LoginGoogleButton />
         </ShowOnly>
