@@ -1,19 +1,19 @@
 import { attach, createEvent, sample } from 'effector';
 
 import { setSession } from '@drag/entities/session';
-import { api } from '@drag/shared/api';
+import { internalApi } from '@drag/shared/api';
 
 export const logout = createEvent();
 
-const deleteSessionFx = attach({ effect: api.deleteSessionApiFx });
+const logoutFx = attach({ effect: internalApi.authLogoutFx });
 
 sample({
   clock: logout,
-  target: deleteSessionFx,
+  target: logoutFx,
 });
 
 sample({
-  clock: deleteSessionFx.done,
+  clock: logoutFx.done,
   fn: () => null,
   target: setSession,
 });

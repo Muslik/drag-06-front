@@ -1,3 +1,2 @@
-export const EventsPage = () => {
-  return <div>Events</div>;
-};
+export { EventsPage } from './ui';
+export * as eventPageModel from './model';
