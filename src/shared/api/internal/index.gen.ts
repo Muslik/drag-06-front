@@ -90,6 +90,24 @@ export type RefreshDto = {
   refreshToken: string;
 };
 
+export type UserAccountEntity = {
+  id: string;
+  firstName: string | null;
+  lastName: string | null;
+  sex?: 'male' | 'female';
+  bio: string | null;
+  email: string;
+  city: string | null;
+  avatarColor: string;
+  username: string;
+  phone: string | null;
+};
+
+export type CarClassEntity = {
+  id: string;
+  name: string;
+};
+
 export type EventEntity = {
   id: string;
   /** @format date-time */
@@ -99,6 +117,39 @@ export type EventEntity = {
   name: string;
   description: string | null;
   eventStatus: 'created' | 'registration' | 'started' | 'finished';
+  qualifications?: QualificationEntity[];
+  participants?: ParticipantEntity[];
+};
+
+export type ParticipantEntity = {
+  id: string;
+  /** @format date-time */
+  createdDate: string;
+  firstName: string;
+  lastName: string;
+  region: string;
+  phone: string | null;
+  car: string;
+  startNumber: string;
+  checkin: boolean;
+  userAccount: UserAccountEntity | null;
+  carClass: CarClassEntity | null;
+  event: EventEntity;
+  qualification: QualificationEntity;
+};
+
+export type QualificationEntity = {
+  id: string;
+  /** @format date-time */
+  createdDate: string;
+  firstRaceTime: number | null;
+  secondRaceTime: number | null;
+  thirdRaceTime: number | null;
+  fourthRaceTime: number | null;
+  bestRaceTime: number;
+  disqualified: boolean;
+  participant: ParticipantEntity;
+  event: EventEntity;
 };
 
 export type CreateEventDto = {
