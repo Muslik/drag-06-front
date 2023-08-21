@@ -28,7 +28,7 @@ export const CreateEventForm = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-  const { submit, fields, errorText, reset } = useForm(newEventForm);
+  const { submit, fields, errorText } = useForm(newEventForm);
   const [isDialogOpen, dialogOpenedFn, dialogClosedFn, isEventCreating] = useUnit([
     $isDialogOpen,
     dialogOpened,
