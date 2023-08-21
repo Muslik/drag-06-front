@@ -27,6 +27,40 @@ export type SessionUserDto = {
   avatarColor: string;
 };
 
+export type RequestValidationError = {
+  /**
+   * Поле у которого возникла ошибка
+   * @example "email"
+   */
+  property: string;
+  /**
+   * Описание каждой ошибки
+   * @example {"isNotEmpty":"Поле не может быть пустым"}
+   */
+  errors: Record<string, string>;
+  nested: object[];
+};
+
+export type ApiValidationErrorResponse = {
+  /**
+   * Тип ошибки
+   * @example "BAD_REQUEST"
+   */
+  type: string;
+  /**
+   * Код ошибки
+   * @example "VALIDATION_ERROR"
+   */
+  code: string;
+  /**
+   * Человеческое описание ошибки
+   * @example "Validation failed"
+   */
+  message: string;
+  /** Ошибки валидации */
+  inner: RequestValidationError[];
+};
+
 export type ApiErrorResponse = {
   /**
    * Тип ошибки
@@ -63,47 +97,17 @@ export type EventEntity = {
   /** @format date-time */
   eventDate: string;
   name: string;
-  eventStatus: 'registration' | 'started' | 'finished';
+  description: string | null;
+  eventStatus: 'created' | 'registration' | 'started' | 'finished';
 };
 
 export type CreateEventDto = {
   /** @format date-time */
   eventDate: string;
   name: string;
-};
-
-export type RequestValidationError = {
-  /**
-   * Поле у которого возникла ошибка
-   * @example "email"
-   */
-  property: string;
-  /**
-   * Описание каждой ошибки
-   * @example {"isNotEmpty":"Поле не может быть пустым"}
-   */
-  errors: Record<string, string>;
-  nested: object[];
-};
-
-export type ApiValidationErrorResponse = {
-  /**
-   * Тип ошибки
-   * @example "BAD_REQUEST"
-   */
-  type: string;
-  /**
-   * Код ошибки
-   * @example "VALIDATION_ERROR"
-   */
-  code: string;
-  /**
-   * Человеческое описание ошибки
-   * @example "Validation failed"
-   */
-  message: string;
-  /** Ошибки валидации */
-  inner: RequestValidationError[];
+  description?: string;
+  /** @default false */
+  shouldStartRegistration?: boolean;
 };
 
 type AuthLoginGoogleParams = { data: LoginGoogleDto };
@@ -111,7 +115,7 @@ type AuthLoginGoogleParams = { data: LoginGoogleDto };
 export const authLoginGoogleFx = createEffect<
   AuthLoginGoogleParams,
   SessionUserDto,
-  ApiErrorResponse
+  ApiValidationErrorResponse | ApiErrorResponse
 >({
   async handler({ data }) {
     const response = await requestFx({
@@ -121,7 +125,7 @@ export const authLoginGoogleFx = createEffect<
     });
 
     if (response.status >= 400) {
-      throw response.body as ApiErrorResponse;
+      throw response.body as ApiValidationErrorResponse | ApiErrorResponse;
     }
 
     return response.body as SessionUserDto;
@@ -205,7 +209,7 @@ type OauthLoginGoogleParams = { data: LoginGoogleDto };
 export const oauthLoginGoogleFx = createEffect<
   OauthLoginGoogleParams,
   JWTTokensDto,
-  ApiErrorResponse
+  ApiValidationErrorResponse | ApiErrorResponse
 >({
   async handler({ data }) {
     const response = await requestFx({
@@ -215,7 +219,7 @@ export const oauthLoginGoogleFx = createEffect<
     });
 
     if (response.status >= 400) {
-      throw response.body as ApiErrorResponse;
+      throw response.body as ApiValidationErrorResponse | ApiErrorResponse;
     }
 
     return response.body as JWTTokensDto;
@@ -227,7 +231,7 @@ type OauthRefreshTokensParams = { data: RefreshDto };
 export const oauthRefreshTokensFx = createEffect<
   OauthRefreshTokensParams,
   JWTTokensDto,
-  ApiErrorResponse
+  ApiValidationErrorResponse | ApiErrorResponse
 >({
   async handler({ data }) {
     const response = await requestFx({
@@ -237,7 +241,7 @@ export const oauthRefreshTokensFx = createEffect<
     });
 
     if (response.status >= 400) {
-      throw response.body as ApiErrorResponse;
+      throw response.body as ApiValidationErrorResponse | ApiErrorResponse;
     }
 
     return response.body as JWTTokensDto;
