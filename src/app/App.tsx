@@ -2,6 +2,7 @@ import { Divider, Box, createTheme, ThemeProvider, CssBaseline } from '@mui/mate
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { RouterProvider } from 'atomic-router-react';
 import 'dayjs/locale/ru';
 import { createEvent, sample } from 'effector';
@@ -9,6 +10,7 @@ import { useUnit } from 'effector-react';
 import { useEffect, useMemo } from 'react';
 
 import { requestSession } from '@drag/entities/session';
+import { env } from '@drag/shared/config';
 import { Notification } from '@drag/shared/ui';
 import { Footer } from '@drag/widgets/footer';
 import { Header } from '@drag/widgets/header';
@@ -42,19 +44,21 @@ export const App = () => {
   );
 
   return (
-    <ThemeProvider theme={theme}>
-      <Notification />
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
-        <CssBaseline />
-        <RouterProvider router={router}>
-          <Box className="grow shrink-0">
-            <Header />
-            <RoutesView />
-          </Box>
-          <Divider />
-          <Footer className="shrink-0" />
-        </RouterProvider>
-      </LocalizationProvider>
-    </ThemeProvider>
+    <GoogleOAuthProvider clientId={env.GOOGLE_CLIENT_ID}>
+      <ThemeProvider theme={theme}>
+        <Notification />
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+          <CssBaseline />
+          <RouterProvider router={router}>
+            <Box className="grow shrink-0">
+              <Header />
+              <RoutesView />
+            </Box>
+            <Divider />
+            <Footer className="shrink-0" />
+          </RouterProvider>
+        </LocalizationProvider>
+      </ThemeProvider>
+    </GoogleOAuthProvider>
   );
 };

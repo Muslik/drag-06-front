@@ -1,1 +1,1 @@
-export { rules } from './validateion-rules';
+export { rules } from './validation-rules';

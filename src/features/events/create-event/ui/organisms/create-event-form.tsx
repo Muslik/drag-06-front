@@ -1,4 +1,4 @@
-import { Add, Close, Send } from '@mui/icons-material';
+import { Add, Close } from '@mui/icons-material';
 import {
   Button,
   Box,
@@ -111,7 +111,7 @@ export const CreateEventForm = () => {
             />
             <FormControlLabel
               control={<Checkbox defaultChecked />}
-              label="Открыть регистрацию"
+              label="Начать регистрацию"
               value={fields.shouldStartRegistration.value}
               onChange={(_, checked) => fields.shouldStartRegistration.onChange(checked)}
               disabled={isEventCreating}
@@ -128,7 +128,7 @@ export const CreateEventForm = () => {
             variant="outlined"
             color="primary"
             disabled={isEventCreating}
-            endIcon={isEventCreating ? <CircularProgress size="20px" color="info" /> : <Send />}
+            endIcon={isEventCreating ? <CircularProgress size="20px" color="info" /> : <Add />}
           >
             Создать
           </Button>

@@ -1,27 +1,17 @@
+import { TokenResponse } from '@react-oauth/google';
 import { createEvent, sample, attach } from 'effector';
-import { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 
 import { setSession } from '@drag/entities/session';
 import { internalApi } from '@drag/shared/api';
 
-export const loginGoogleDone = createEvent<GoogleLoginResponse | GoogleLoginResponseOffline>();
+export const loginGoogleDone = createEvent<TokenResponse>();
 
-const isGoogleLoginReponse = (
-  response: GoogleLoginResponse | GoogleLoginResponseOffline,
-): response is GoogleLoginResponse => {
-  return !response.code;
-};
-
-const loginGoogleFx = attach({ effect: internalApi.authLoginGoogleFx });
+const loginGoogleFx = attach({ effect: internalApi.authSignInFx });
 
 sample({
-  source: loginGoogleDone,
+  clock: loginGoogleDone,
   fn: (response) => {
-    if (isGoogleLoginReponse(response)) {
-      return { data: { token: response.accessToken } };
-    }
-
-    return { data: { token: response.code } };
+    return { data: { token: response.access_token, provider: 'google' as const } };
   },
   target: loginGoogleFx,
 });

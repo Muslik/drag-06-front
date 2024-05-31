@@ -1,7 +1,5 @@
 /* eslint-disable */
-
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -10,35 +8,47 @@
  * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
  * ---------------------------------------------------------------
  */
+
 import { createEffect } from 'effector';
 
 import { requestFx } from '../request';
 
-export type LoginGoogleDto = {
+export type SignInDto = {
+  /** @example "google-token" */
   token: string;
+  /** @example "google" */
+  provider: 'google';
 };
 
-export type SessionUserDto = {
-  id: string;
+export type UserAuthDto = {
+  /** @example 1 */
+  id: number;
+  /** @example "johny" */
   username: string;
+  /** @example "johny76@gmail.com" */
   email: string;
-  firstName: string | null;
-  lastName: string | null;
+  /** @example "John" */
+  firstName?: string | null;
+  /** @example "Doe" */
+  lastName?: string | null;
+  /** @example "#ffffff" */
   avatarColor: string;
 };
 
-export type RequestValidationError = {
-  /**
-   * Поле у которого возникла ошибка
-   * @example "email"
-   */
-  property: string;
-  /**
-   * Описание каждой ошибки
-   * @example {"isNotEmpty":"Поле не может быть пустым"}
-   */
-  errors: Record<string, string>;
-  nested: object[];
+export type RequestValidationErrorDto = {
+  isString?: string;
+  isNumberString?: string;
+  isEmail?: string;
+  isNumber?: string;
+  isEnum?: string;
+  isNotEmpty?: string;
+  isArray?: string;
+  isIn?: string;
+  isDate?: string;
+  isDateString?: string;
+  arrayMaxSize?: string;
+  arrayMinSize?: string;
+  arrayUnique?: string;
 };
 
 export type ApiValidationErrorResponse = {
@@ -58,7 +68,7 @@ export type ApiValidationErrorResponse = {
    */
   message: string;
   /** Ошибки валидации */
-  inner: RequestValidationError[];
+  inner: Record<string, RequestValidationErrorDto>;
 };
 
 export type ApiErrorResponse = {
@@ -82,95 +92,95 @@ export type ApiErrorResponse = {
 };
 
 export type JWTTokensDto = {
+  /** @example "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" */
   accessToken: string;
+  /** @example "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" */
   refreshToken: string;
 };
 
-export type RefreshDto = {
+export type RefreshTokenDto = {
+  /** @example "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" */
   refreshToken: string;
 };
 
-export type UserAccountEntity = {
-  id: string;
-  firstName: string | null;
-  lastName: string | null;
-  sex?: 'male' | 'female';
-  bio: string | null;
-  email: string;
-  city: string | null;
-  avatarColor: string;
-  username: string;
-  phone: string | null;
+export type TournamentDto = {
+  /** @example "Турнир по дрег рейсингу 3й этап" */
+  title: string;
+  /** @example "Турнир пройдет дома" */
+  description: string;
+  /**
+   * @format date-time
+   * @example "2021-10-10T10:00:00.000Z"
+   */
+  startDate: string;
+  /**
+   * @format date-time
+   * @example "2021-10-10T10:00:00.000Z"
+   */
+  endRegistrationDate: string | null;
+  /** @example 2000 */
+  classET10Fee: number;
+  /** @example 2000 */
+  classET11Fee: number;
+  /** @example 2000 */
+  classET12Fee: number;
+  /** @example 2000 */
+  classET13Fee: number;
+  /** @example 2000 */
+  classET14Fee: number;
+  /** @example 2000 */
+  classET15Fee: number;
+  /** @example [1,2,3,4,5] */
+  availableRacerNumbers: number[];
+  /** @example "CREATED" */
+  status: 'CREATED' | 'REGISTRATION' | 'IN_PROGRESS' | 'FINISHED';
+  /** @example 1 */
+  id: number;
 };
 
-export type CarClassEntity = {
-  id: string;
-  name: string;
-};
-
-export type EventEntity = {
-  id: string;
-  /** @format date-time */
-  createdDate: string;
-  /** @format date-time */
-  eventDate: string;
-  name: string;
-  description: string | null;
-  eventStatus: 'created' | 'registration' | 'started' | 'finished';
-  qualifications?: QualificationEntity[];
-  participants?: ParticipantEntity[];
-};
-
-export type ParticipantEntity = {
-  id: string;
-  /** @format date-time */
-  createdDate: string;
-  firstName: string;
-  lastName: string;
-  region: string;
-  phone: string | null;
-  car: string;
-  startNumber: string;
-  checkin: boolean;
-  userAccount: UserAccountEntity | null;
-  carClass: CarClassEntity | null;
-  event: EventEntity;
-  qualification: QualificationEntity;
-};
-
-export type QualificationEntity = {
-  id: string;
-  /** @format date-time */
-  createdDate: string;
-  firstRaceTime: number | null;
-  secondRaceTime: number | null;
-  thirdRaceTime: number | null;
-  fourthRaceTime: number | null;
-  bestRaceTime: number;
-  disqualified: boolean;
-  participant: ParticipantEntity;
-  event: EventEntity;
-};
-
-export type CreateEventDto = {
-  /** @format date-time */
-  eventDate: string;
-  name: string;
+export type TournamentCreateDto = {
+  /** @example "Турнир по дрег рейсингу 3й этап" */
+  title: string;
+  /** @example "Турнир пройдет дома" */
   description?: string;
-  /** @default false */
-  shouldStartRegistration?: boolean;
+  /**
+   * @format date-time
+   * @example "2021-10-10T10:00:00.000Z"
+   */
+  startDate: string;
+  /**
+   * @format date-time
+   * @example "2021-10-10T10:00:00.000Z"
+   */
+  endRegistrationDate?: string | null;
+  /** @example 2000 */
+  classET10Fee: number;
+  /** @example 2000 */
+  classET11Fee: number;
+  /** @example 2000 */
+  classET12Fee: number;
+  /** @example 2000 */
+  classET13Fee: number;
+  /** @example 2000 */
+  classET14Fee: number;
+  /** @example 2000 */
+  classET15Fee: number;
+  /** @example [1,2,3,4,5] */
+  availableRacerNumbers: number[];
+  /** @example "CREATED" */
+  status?: 'CREATED' | 'REGISTRATION' | 'IN_PROGRESS' | 'FINISHED';
 };
 
-type AuthLoginGoogleParams = { data: LoginGoogleDto };
+type AuthSignInParams = { data: SignInDto };
 
-export const authLoginGoogleFx = createEffect<
-  AuthLoginGoogleParams,
-  SessionUserDto,
+export const authSignInFx = createEffect<
+  AuthSignInParams,
+  UserAuthDto,
   ApiValidationErrorResponse | ApiErrorResponse
 >({
   async handler({ data }) {
     const response = await requestFx({
-      path: '/auth/login/google',
+      path: '/auth/sign-in',
       method: 'post',
       body: data,
     });
@@ -179,20 +189,60 @@ export const authLoginGoogleFx = createEffect<
       throw response.body as ApiValidationErrorResponse | ApiErrorResponse;
     }
 
-    return response.body as SessionUserDto;
+    return response.body as UserAuthDto;
   },
 });
 
-type AuthGetSessionUserParams = void;
+type AuthJwtSignInParams = { data: SignInDto };
 
-export const authGetSessionUserFx = createEffect<
-  AuthGetSessionUserParams,
-  SessionUserDto,
-  ApiErrorResponse
+export const authJwtSignInFx = createEffect<
+  AuthJwtSignInParams,
+  JWTTokensDto,
+  ApiValidationErrorResponse | ApiErrorResponse
 >({
+  async handler({ data }) {
+    const response = await requestFx({
+      path: '/auth/jwt/sign-in',
+      method: 'post',
+      body: data,
+    });
+
+    if (response.status >= 400) {
+      throw response.body as ApiValidationErrorResponse | ApiErrorResponse;
+    }
+
+    return response.body as JWTTokensDto;
+  },
+});
+
+type AuthRefreshTokensParams = { data: RefreshTokenDto };
+
+export const authRefreshTokensFx = createEffect<
+  AuthRefreshTokensParams,
+  JWTTokensDto,
+  ApiValidationErrorResponse | ApiErrorResponse
+>({
+  async handler({ data }) {
+    const response = await requestFx({
+      path: '/auth/jwt/refresh',
+      method: 'post',
+      body: data,
+    });
+
+    if (response.status >= 400) {
+      throw response.body as ApiValidationErrorResponse | ApiErrorResponse;
+    }
+
+    return response.body as JWTTokensDto;
+  },
+});
+
+type AuthMeParams = void;
+
+export const authMeFx = createEffect<AuthMeParams, UserAuthDto, ApiErrorResponse>({
   async handler() {
     const response = await requestFx({
-      path: '/auth/session',
+      path: '/auth/me',
       method: 'post',
     });
 
@@ -200,7 +250,7 @@ export const authGetSessionUserFx = createEffect<
       throw response.body as ApiErrorResponse;
     }
 
-    return response.body as SessionUserDto;
+    return response.body as UserAuthDto;
   },
 });
 
@@ -210,23 +260,6 @@ export const authLogoutFx = createEffect<AuthLogoutParams, void, ApiErrorRespons
   async handler() {
     const response = await requestFx({
       path: '/auth/logout',
-      method: 'post',
-    });
-
-    if (response.status >= 400) {
-      throw response.body as ApiErrorResponse;
-    }
-
-    return response.body as void;
-  },
-});
-
-type AuthLogoutAllParams = void;
-
-export const authLogoutAllFx = createEffect<AuthLogoutAllParams, void, ApiErrorResponse>({
-  async handler() {
-    const response = await requestFx({
-      path: '/auth/logout-all',
       method: 'post',
     });
 
@@ -255,128 +288,45 @@ export const usersGetUsersFx = createEffect<UsersGetUsersParams, void, any>({
   },
 });
 
-type OauthLoginGoogleParams = { data: LoginGoogleDto };
+type TournamentGetTournamentsParams = void;
 
-export const oauthLoginGoogleFx = createEffect<
-  OauthLoginGoogleParams,
-  JWTTokensDto,
-  ApiValidationErrorResponse | ApiErrorResponse
+export const tournamentGetTournamentsFx = createEffect<
+  TournamentGetTournamentsParams,
+  TournamentDto[],
+  TournamentDto
 >({
-  async handler({ data }) {
+  async handler() {
     const response = await requestFx({
-      path: '/oauth/login/google',
-      method: 'post',
-      body: data,
-    });
-
-    if (response.status >= 400) {
-      throw response.body as ApiValidationErrorResponse | ApiErrorResponse;
-    }
-
-    return response.body as JWTTokensDto;
-  },
-});
-
-type OauthRefreshTokensParams = { data: RefreshDto };
-
-export const oauthRefreshTokensFx = createEffect<
-  OauthRefreshTokensParams,
-  JWTTokensDto,
-  ApiValidationErrorResponse | ApiErrorResponse
->({
-  async handler({ data }) {
-    const response = await requestFx({
-      path: '/oauth/refresh-tokens',
-      method: 'post',
-      body: data,
-    });
-
-    if (response.status >= 400) {
-      throw response.body as ApiValidationErrorResponse | ApiErrorResponse;
-    }
-
-    return response.body as JWTTokensDto;
-  },
-});
-
-type EventsGetEventsParams = {
-  query?: {
-    take?: string;
-    skip?: string;
-    direction?: 'ASC' | 'DESC';
-    order?: 'eventDate' | 'name' | 'eventStatus';
-    search?: string;
-  };
-};
-
-export const eventsGetEventsFx = createEffect<
-  EventsGetEventsParams,
-  EventEntity[],
-  ApiErrorResponse
->({
-  async handler({ query }) {
-    const response = await requestFx({
-      path: '/events',
+      path: '/tournaments',
       method: 'get',
-      query,
     });
 
     if (response.status >= 400) {
-      throw response.body as ApiErrorResponse;
+      throw response.body as TournamentDto;
     }
 
-    return response.body as EventEntity[];
+    return response.body as TournamentDto[];
   },
 });
 
-type EventsCreateEventParams = { data: CreateEventDto };
+type TournamentCreateTournamentParams = { data: TournamentCreateDto };
 
-export const eventsCreateEventFx = createEffect<
-  EventsCreateEventParams,
-  EventEntity,
-  ApiValidationErrorResponse | ApiErrorResponse
+export const tournamentCreateTournamentFx = createEffect<
+  TournamentCreateTournamentParams,
+  TournamentDto,
+  ApiValidationErrorResponse
 >({
   async handler({ data }) {
     const response = await requestFx({
-      path: '/events',
+      path: '/tournaments',
       method: 'post',
       body: data,
     });
 
     if (response.status >= 400) {
-      throw response.body as ApiValidationErrorResponse | ApiErrorResponse;
+      throw response.body as ApiValidationErrorResponse;
     }
 
-    return response.body as EventEntity;
-  },
-});
-
-type EventsGetActiveEventsParams = {
-  query?: {
-    take?: string;
-    skip?: string;
-    direction?: 'ASC' | 'DESC';
-    order?: 'eventDate' | 'name' | 'eventStatus';
-    search?: string;
-  };
-};
-
-export const eventsGetActiveEventsFx = createEffect<
-  EventsGetActiveEventsParams,
-  EventEntity[],
-  ApiErrorResponse
->({
-  async handler({ query }) {
-    const response = await requestFx({
-      path: '/events/active',
-      method: 'get',
-      query,
-    });
-
-    if (response.status >= 400) {
-      throw response.body as ApiErrorResponse;
-    }
-
-    return response.body as EventEntity[];
+    return response.body as TournamentDto;
   },
 });
