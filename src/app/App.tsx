@@ -1,64 +1,40 @@
-import { Divider, Box, createTheme, ThemeProvider, CssBaseline } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { createTheme, MantineProvider } from '@mantine/core';
+import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { RouterProvider } from 'atomic-router-react';
 import 'dayjs/locale/ru';
-import { createEvent, sample } from 'effector';
-import { useUnit } from 'effector-react';
-import { useEffect, useMemo } from 'react';
 
-import { requestSession } from '@drag/entities/session';
+import { Pages } from '@drag/pages';
 import { env } from '@drag/shared/config';
-import { Notification } from '@drag/shared/ui';
+import { NOTIFICATIONS_LIMIT, NOTIFICATIONS_TIMEOUT } from '@drag/shared/notification';
+import { router } from '@drag/shared/routing';
 import { Footer } from '@drag/widgets/footer';
 import { Header } from '@drag/widgets/header';
 
-import { router, RoutesView } from './routing';
 import './styles/index.css';
 
-const readyEvent = createEvent();
+const theme = createTheme({});
 
-sample({
-  clock: readyEvent,
-  target: requestSession,
-});
-
-export const App = () => {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const ready = useUnit(readyEvent);
-
-  useEffect(() => {
-    ready();
-  }, [ready]);
-
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: prefersDarkMode ? 'dark' : 'light',
-        },
-      }),
-    [prefersDarkMode],
-  );
-
+export function App() {
   return (
-    <GoogleOAuthProvider clientId={env.GOOGLE_CLIENT_ID}>
-      <ThemeProvider theme={theme}>
-        <Notification />
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
-          <CssBaseline />
-          <RouterProvider router={router}>
-            <Box className="grow shrink-0">
-              <Header />
-              <RoutesView />
-            </Box>
-            <Divider />
-            <Footer className="shrink-0" />
-          </RouterProvider>
-        </LocalizationProvider>
-      </ThemeProvider>
-    </GoogleOAuthProvider>
+    <MantineProvider theme={theme}>
+      <Notifications
+        autoClose={NOTIFICATIONS_TIMEOUT}
+        position="bottom-center"
+        limit={NOTIFICATIONS_LIMIT}
+      />
+      <GoogleOAuthProvider clientId={env.GOOGLE_CLIENT_ID}>
+        <RouterProvider router={router}>
+          <div className="flex flex-col grow">
+            <Header />
+            <Pages />
+          </div>
+          <Footer className="shrink-0" />
+        </RouterProvider>
+      </GoogleOAuthProvider>
+    </MantineProvider>
   );
-};
+}

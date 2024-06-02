@@ -1,4 +1,4 @@
-import { Avatar } from '@mui/material';
+import { Avatar } from '@mantine/core';
 import { useUnit } from 'effector-react';
 
 import { $session } from '@drag/entities/session';
@@ -11,9 +11,9 @@ export const UserAvatar = () => {
     return null;
   }
 
-  const { firstName, lastName, avatarColor } = session;
+  const { firstName, lastName } = session;
 
   const initials = generateAvatarInitials(firstName, lastName);
 
-  return <Avatar sx={{ bgcolor: avatarColor, color: '#fff' }}>{initials}</Avatar>;
+  return <Avatar>{initials}</Avatar>;
 };

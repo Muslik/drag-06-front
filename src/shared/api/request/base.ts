@@ -19,17 +19,14 @@ export const requestFx = attach({
 });
 
 if (env.IS_DEBUG || env.IS_DEV_ENV) {
-  // eslint-disable-next-line effector/no-watch
   sendRequestFx.watch(({ path, method }) => {
     logger.info('[ REQUEST ]', { method, path });
   });
 
-  // eslint-disable-next-line effector/no-watch
   sendRequestFx.done.watch(({ params: { path, method }, result: { status } }) => {
     logger.info('[ REQUEST DONE ]', { method, path, status });
   });
 
-  // eslint-disable-next-line effector/no-watch
   sendRequestFx.fail.watch(({ params: { path, method }, error: { status, body } }) => {
     logger.info('[ REQUEST FAIL ]', { method, path, status, body });
   });

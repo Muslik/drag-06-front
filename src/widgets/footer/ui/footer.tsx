@@ -1,7 +1,8 @@
-import { useTheme, Container, Box, Typography } from '@mui/material';
+import { Container, Box, Text } from '@mantine/core';
 import clsx from 'clsx';
+import { useUnit } from 'effector-react';
 
-import { Logo } from '@drag/shared/ui';
+import { routes } from '@drag/shared/routing';
 
 type Props = {
   className?: string;
@@ -10,33 +11,22 @@ type Props = {
 const currentYear = new Date().getFullYear();
 
 export const Footer = ({ className }: Props) => {
-  const {
-    palette: { mode },
-  } = useTheme();
+  const [isHomePage] = useUnit([routes.home.$isOpened]);
+  if (isHomePage) {
+    return null;
+  }
 
   return (
     <Box
       component="footer"
       className={clsx(className)}
-      sx={{
-        backgroundColor: 'background.paper',
-        backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));',
-      }}
     >
-      <Container maxWidth="xl">
-        <Box
-          sx={{
-            flexDirection: { xs: 'column', md: 'row' },
-            padding: '8px 0',
-          }}
-          className="flex justify-between items-center"
-        >
-          <Box sx={{ marginBottom: { xs: '16px', md: 0 } }}>
-            <Logo isInverted={mode === 'dark'} />
-          </Box>
-          <Typography color="text.secondary" className="mr-auto" variant="caption">
+      <Container>
+        <Box className="flex justify-between items-center">
+          <Box>{/* <Logo isInverted={mode === 'dark'} /> */}</Box>
+          <Text c="gray" className="mr-auto" variant="caption">
             Copyright © {currentYear}
-          </Typography>
+          </Text>
         </Box>
       </Container>
     </Box>
