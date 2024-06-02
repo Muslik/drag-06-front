@@ -1,7 +1,7 @@
+import { lazy } from 'react';
 import { currentRoute } from './model';
-import { TournamentCreatePage } from './page';
 
 export const TournamentCreateRoute = {
-  view: TournamentCreatePage,
+  view: lazy(() => import('./tournament-create-page')),
   route: currentRoute,
 };

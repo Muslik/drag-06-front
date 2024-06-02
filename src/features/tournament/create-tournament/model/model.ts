@@ -1,6 +1,6 @@
 import { createMutation } from '@farfetched/core';
 import { createEvent, sample } from 'effector';
-import { ZodIssueCode, z } from 'zod';
+import * as z from 'zod';
 
 import { internalApi } from '@drag/shared/api';
 import { showNotificationFx } from '@drag/shared/notification';
@@ -48,7 +48,7 @@ export const formSchema = z.object({
 
     if (error) {
       ctx.addIssue({
-        code: ZodIssueCode.custom,
+        code: "custom",
         message: error.errors[0].message,
       });
     }

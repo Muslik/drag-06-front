@@ -16,7 +16,7 @@ async function clientRequest<Response = unknown>({
   }
 
   // Convert body object to JSON if it's not null
-  const query = queryToString(options.query);
+  const query = queryToString(convertToStrings(options.query));
   const body =
     contentIs(headers, 'application/json') && options.body
       ? JSON.stringify(options.body)
@@ -65,6 +65,21 @@ function toObject(headers: Headers): Record<string, string> {
   });
 
   return target;
+}
+
+function convertToStrings(
+  record?: Record<string, string | number>,
+): Record<string, string> | undefined {
+  if (!record) {
+    return undefined;
+  }
+  const result: Record<string, string> = {};
+
+  for (const key in record) {
+    result[key] = String(record[key]);
+  }
+
+  return result;
 }
 
 function queryToString(query: Record<string, string> = {}) {

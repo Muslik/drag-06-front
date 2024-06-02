@@ -4,7 +4,7 @@ import { useUnit } from 'effector-react';
 import { tournamentModel } from '@drag/entities/tournament';
 import { routes } from '@drag/shared/routing';
 
-export function HomePage () {
+export default function HomePage () {
   const [openedTournament] = useUnit([tournamentModel.$openedTournament]);
 
   return (
