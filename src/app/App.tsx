@@ -1,4 +1,4 @@
-import { createTheme, MantineProvider } from '@mantine/core';
+import { createTheme, LoadingOverlay, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import { Notifications } from '@mantine/notifications';
@@ -6,6 +6,7 @@ import '@mantine/notifications/styles.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { RouterProvider } from 'atomic-router-react';
 import 'dayjs/locale/ru';
+import { Suspense } from 'react';
 
 import { Pages } from '@drag/pages';
 import { env } from '@drag/shared/config';
@@ -21,20 +22,22 @@ const theme = createTheme({});
 export function App() {
   return (
     <MantineProvider theme={theme}>
-      <Notifications
-        autoClose={NOTIFICATIONS_TIMEOUT}
-        position="bottom-center"
-        limit={NOTIFICATIONS_LIMIT}
-      />
-      <GoogleOAuthProvider clientId={env.GOOGLE_CLIENT_ID}>
+      <Suspense fallback={<LoadingOverlay visible={true} />}>
         <RouterProvider router={router}>
-          <div className="flex flex-col grow">
-            <Header />
-            <Pages />
-          </div>
-          <Footer className="shrink-0" />
+          <Notifications
+            autoClose={NOTIFICATIONS_TIMEOUT}
+            position="bottom-center"
+            limit={NOTIFICATIONS_LIMIT}
+          />
+          <GoogleOAuthProvider clientId={env.GOOGLE_CLIENT_ID}>
+            <div className="flex flex-col grow">
+              <Header />
+              <Pages />
+            </div>
+            <Footer className="shrink-0" />
+          </GoogleOAuthProvider>
         </RouterProvider>
-      </GoogleOAuthProvider>
+      </Suspense>
     </MantineProvider>
   );
 }
