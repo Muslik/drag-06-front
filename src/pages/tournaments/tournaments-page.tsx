@@ -1,4 +1,4 @@
-import { Text, Container, DefaultMantineColor, Paper, Title, Box, Button } from '@mantine/core';
+import { Text, Container, DefaultMantineColor, Paper, Title, Box } from '@mantine/core';
 import { Link } from 'atomic-router-react';
 import dayjs from 'dayjs';
 import { useUnit } from 'effector-react';
@@ -46,10 +46,9 @@ export default function TournamentsPage() {
         Список турниров:
       </Title>
       {data.map(({ id, description, title, status, startDate }) => {
-        const { title: badgeTitle, color: badgeColor } = BADGE_MAP[status];
+        const { color: badgeColor } = BADGE_MAP[status];
 
         const isToday = dayjs().isSame(startDate, 'day');
-        const isCurrentYear = dayjs().isSame(startDate, 'year');
         const isFinished = status === 'FINISHED';
 
         const startDateDescription =
@@ -73,11 +72,11 @@ export default function TournamentsPage() {
               className="flex flex-col items-center justify-center"
             >
               {startDateDescription && (
-                <Text color="#fff" size="md" className="text-center">
+                <Text c="#fff" size="md" className="text-center">
                   {startDateDescription}
                 </Text>
               )}
-              <Text color="#fff" size="32px">
+              <Text c="#fff" size="32px">
                 {startTimeDescription}
               </Text>
             </Paper>
@@ -94,7 +93,7 @@ export default function TournamentsPage() {
               params={{ tournamentId: '1' }}
               className="ml-auto mt-auto mb-auto"
             >
-              Зарегистироваться
+              Открыть
             </Link>
           </Paper>
         );
