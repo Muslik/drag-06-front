@@ -107,7 +107,10 @@ export type RefreshTokenDto = {
 export type TournamentDto = {
   /** @example "Турнир по дрег рейсингу 3й этап" */
   title: string;
-  /** @example "Турнир пройдет дома" */
+  /**
+   * @maxLength 1500
+   * @example "Турнир пройдет дома"
+   */
   description: string;
   /**
    * @format date-time
@@ -127,7 +130,10 @@ export type TournamentDto = {
 export type TournamentCreateDto = {
   /** @example "Турнир по дрег рейсингу 3й этап" */
   title: string;
-  /** @example "Турнир пройдет дома" */
+  /**
+   * @maxLength 1500
+   * @example "Турнир пройдет дома"
+   */
   description?: string;
   /**
    * @format date-time

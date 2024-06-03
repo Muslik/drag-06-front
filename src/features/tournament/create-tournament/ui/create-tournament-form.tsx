@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Paper, Select, Textarea, TextInput } from '@mantine/core';
+import { Button, Checkbox, LoadingOverlay, Paper, Textarea, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { IconCurrencyRubel } from '@tabler/icons-react';
 import cx from 'clsx';
@@ -7,21 +7,8 @@ import dayjs from 'dayjs';
 import { useUnit } from 'effector-react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { internalApi } from '@drag/shared/api';
-
 import { MAX_DESCRIPTION_LENGTH } from '../config';
 import { creationCancelled, Form, formSchema, formSubmitted, tournamentMutation } from '../model';
-
-const options = [
-  {
-    label: 'Создан',
-    value: 'CREATED',
-  },
-  {
-    label: 'Открыта регистрация',
-    value: 'REGISTRATION',
-  },
-] satisfies { label: string; value: internalApi.TournamentDto['status'] }[];
 
 export const CreateTournamentForm = ({ className }: { className?: string }) => {
   const {
@@ -33,7 +20,7 @@ export const CreateTournamentForm = ({ className }: { className?: string }) => {
     defaultValues: {
       title: '',
       description: '',
-      status: 'REGISTRATION',
+      shouldStartRegistration: true,
       availableRacerNumbers: '',
       fee: 0,
       startDate: dayjs().add(1, 'day').startOf('day').toDate(),
@@ -42,7 +29,7 @@ export const CreateTournamentForm = ({ className }: { className?: string }) => {
   const { isLoading, submitted, cancelled } = useUnit({
     isLoading: tournamentMutation.$pending,
     submitted: formSubmitted,
-    cancelled: creationCancelled
+    cancelled: creationCancelled,
   });
 
   return (
@@ -53,7 +40,14 @@ export const CreateTournamentForm = ({ className }: { className?: string }) => {
       radius="md"
       className={cx(className)}
       onSubmit={handleSubmit(submitted)}
+      pos="relative"
     >
+      <LoadingOverlay
+        visible={isLoading}
+        color="gray"
+        opacity={1}
+        overlayProps={{ zIndex: 1000, radius: 'lg', blur: 2 }}
+      />
       <Controller
         control={control}
         name="title"
@@ -140,16 +134,15 @@ export const CreateTournamentForm = ({ className }: { className?: string }) => {
       />
       <Controller
         control={control}
-        name="status"
+        name="shouldStartRegistration"
         render={({ field }) => (
-          <Select
+          <Checkbox
             disabled={isLoading}
             size="md"
-            label="Статус"
             className="mb-12"
-            data={options}
-            error={errors.status?.message}
-            {...field}
+            label="Начать регистрацию"
+            checked={field.value}
+            onChange={field.onChange}
           />
         )}
       />

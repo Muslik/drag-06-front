@@ -36,7 +36,7 @@ export const formSchema = z.object({
     const { error } = z
       .array(
         z
-          .number({ message: "Неверный формат. Пример: '1-3,7-10,5'"})
+          .number({ message: "Неверный формат. Пример: '1-3,7-10,5'" })
           .min(1, 'Номера не могут содержать меньше 1')
           .max(99, 'Номера не могут быть больше 99'),
         {
@@ -48,7 +48,7 @@ export const formSchema = z.object({
 
     if (error) {
       ctx.addIssue({
-        code: "custom",
+        code: 'custom',
         message: error.errors[0].message,
       });
     }
@@ -61,7 +61,7 @@ export type Form = {
   startDate: Date;
   fee: number;
   availableRacerNumbers: string;
-  status: internalApi.TournamentCreateDto['status'];
+  shouldStartRegistration: boolean;
 };
 
 export const formSubmitted = createEvent<Form>();
@@ -76,7 +76,7 @@ sample({
     title,
     description,
     fee,
-    status,
+    shouldStartRegistration,
     startDate,
     availableRacerNumbers,
   }): internalApi.TournamentCreateTournamentParams => {
@@ -87,7 +87,7 @@ sample({
         availableRacerNumbers: parseRacerNumbers(availableRacerNumbers) ?? [],
         startDate: startDate.toString(),
         fee,
-        status,
+        status: shouldStartRegistration ? 'REGISTRATION' : 'CREATED',
       },
     };
   },

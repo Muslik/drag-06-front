@@ -7,6 +7,7 @@ export const currentRoute = routes.tournamentsCreate;
 
 sample({
   clock: createTournamentModel.tournamentMutation.finished.success,
+  filter: currentRoute.$isOpened,
   target: routes.tournaments.open
 })
 
