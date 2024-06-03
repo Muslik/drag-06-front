@@ -4,17 +4,12 @@ import { tournamentModel } from '@drag/entities/tournament';
 import { wrapEventToFx } from '@drag/shared/lib/wrapEventToEffect';
 import { routes } from '@drag/shared/routing';
 
-export const currentRoute = routes.tournament.all;
+export const currentRoute = routes.tournament.current;
 
 chainRoute({
   route: currentRoute,
   beforeOpen: {
-    effect: wrapEventToFx(tournamentModel.tournamentsQuery.start),
-    mapParams: () => ({
-      query: {
-        'order[field]': 'startDate',
-        'order[direction]': 'desc',
-      } as const,
-    }),
+    effect: wrapEventToFx(tournamentModel.tournamentQuery.start),
+    mapParams: ({ params }) => ({ id: params.tournamentId }),
   },
 });
