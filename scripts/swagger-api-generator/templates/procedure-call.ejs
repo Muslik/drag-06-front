@@ -50,7 +50,7 @@ const securityTmpl = security ? 'true' : null;
 export const <%~ variableName %>Fx = createEffect<<%~ typeParamsVariableName %>, <%~ type %>, <%~ errorType  %>>({
     async handler(<%~ parameterNames.length ? `{ ${parameterNames} }` : '' %>) {
         const response = await requestFx({
-            path: '<%~ path %>',
+            path: `<%~ path %>`,
             method: '<%~ method %>',
             <%~ queryTmpl ? `query,` : '' %>
             <%~ bodyTmpl ? `body: ${bodyTmpl},` : '' %>

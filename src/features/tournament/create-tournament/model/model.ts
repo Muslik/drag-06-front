@@ -7,6 +7,7 @@ import { showNotificationFx } from '@drag/shared/notification';
 
 import { MAX_DESCRIPTION_LENGTH } from '../config';
 import { parseRacerNumbers } from '../lib/parse-racer-numbers';
+import dayjs from 'dayjs';
 
 export const tournamentMutation = createMutation({
   effect: internalApi.tournamentCreateTournamentFx,
@@ -20,8 +21,13 @@ export const formSchema = z.object({
     .max(MAX_DESCRIPTION_LENGTH, `Максимальная длина описания ${MAX_DESCRIPTION_LENGTH} символов`),
   startDate: z.preprocess(
     (val) => (val instanceof Date ? new Date(val) : null),
-    z.date({ message: 'Поле обязательно для заполнения' }).refine((val) => val > new Date(), {
-      message: 'Дата должна быть в будущем',
+    z.date({ message: 'Поле обязательно для заполнения' }).refine((val) => {
+      const currentDate = dayjs();
+      const thresholdDate = currentDate.add(8, 'hour');
+
+      return dayjs(val).isAfter(thresholdDate)
+    }, {
+      message: 'Начало турнира должно быть в будущем',
     }),
   ),
   fee: z.preprocess(

@@ -13,6 +13,31 @@ import { createEffect } from 'effector';
 
 import { requestFx } from '../request';
 
+export type ApiErrorResponse = {
+  /**
+   * Error status code
+   * @example 401
+   */
+  statusCode: number;
+  /**
+   * Error type
+   * @example "UNAUTHORIZED"
+   */
+  type: string;
+  /**
+   * Error code
+   * @example "AUTH.INVALID_GRANT"
+   */
+  code: string;
+  /**
+   * Error message
+   * @example "Token is not valid"
+   */
+  message: string;
+  /** Error additional info */
+  inner?: object;
+};
+
 export type SignInDto = {
   /** @example "google-token" */
   token: string;
@@ -54,42 +79,27 @@ export type RequestValidationErrorDto = {
 
 export type ApiValidationErrorResponse = {
   /**
-   * Тип ошибки
+   * Error status code
+   * @example 400
+   */
+  statusCode: number;
+  /**
+   * Error type
    * @example "BAD_REQUEST"
    */
   type: string;
   /**
-   * Код ошибки
+   * Error code
    * @example "VALIDATION_ERROR"
    */
   code: string;
   /**
-   * Человеческое описание ошибки
+   * Error message
    * @example "Validation failed"
    */
   message: string;
-  /** Ошибки валидации */
+  /** Validation errors */
   inner: Record<string, RequestValidationErrorDto>;
-};
-
-export type ApiErrorResponse = {
-  /**
-   * Тип ошибки
-   * @example "NOT_FOUND"
-   */
-  type: string;
-  /**
-   * Код ошибки
-   * @example "EMPLOYEE_NOT_FOUND_ERROR_CODE"
-   */
-  code: string;
-  /**
-   * Человеческое описание ошибки
-   * @example "Пользователь не найден"
-   */
-  message: string;
-  /** Подробная информация об ошибке */
-  inner?: object;
 };
 
 export type JWTTokensDto = {
@@ -103,6 +113,8 @@ export type RefreshTokenDto = {
   /** @example "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9" */
   refreshToken: string;
 };
+
+export type RateLimitException = object;
 
 export type TournamentDto = {
   /** @example "Турнир по дрег рейсингу 3й этап" */
@@ -125,6 +137,8 @@ export type TournamentDto = {
   status: 'CREATED' | 'REGISTRATION' | 'IN_PROGRESS' | 'FINISHED';
   /** @example 1 */
   id: number;
+  /** @format date-time */
+  createdAt: string;
 };
 
 export type TournamentCreateDto = {
@@ -157,7 +171,7 @@ export const authSignInFx = createEffect<
 >({
   async handler({ data }) {
     const response = await requestFx({
-      path: '/auth/sign-in',
+      path: `/auth/sign-in`,
       method: 'post',
       body: data,
     });
@@ -179,7 +193,7 @@ export const authJwtSignInFx = createEffect<
 >({
   async handler({ data }) {
     const response = await requestFx({
-      path: '/auth/jwt/sign-in',
+      path: `/auth/jwt/sign-in`,
       method: 'post',
       body: data,
     });
@@ -201,7 +215,7 @@ export const authRefreshTokensFx = createEffect<
 >({
   async handler({ data }) {
     const response = await requestFx({
-      path: '/auth/jwt/refresh',
+      path: `/auth/jwt/refresh`,
       method: 'post',
       body: data,
     });
@@ -219,7 +233,7 @@ export type AuthMeParams = void;
 export const authMeFx = createEffect<AuthMeParams, UserAuthDto, ApiErrorResponse>({
   async handler() {
     const response = await requestFx({
-      path: '/auth/me',
+      path: `/auth/me`,
       method: 'post',
     });
 
@@ -236,7 +250,7 @@ export type AuthLogoutParams = void;
 export const authLogoutFx = createEffect<AuthLogoutParams, void, ApiErrorResponse>({
   async handler() {
     const response = await requestFx({
-      path: '/auth/logout',
+      path: `/auth/logout`,
       method: 'post',
     });
 
@@ -253,7 +267,7 @@ export type UsersGetUsersParams = void;
 export const usersGetUsersFx = createEffect<UsersGetUsersParams, void, any>({
   async handler() {
     const response = await requestFx({
-      path: '/users',
+      path: `/users`,
       method: 'get',
     });
 
@@ -278,17 +292,17 @@ export type TournamentGetTournamentsParams = {
 export const tournamentGetTournamentsFx = createEffect<
   TournamentGetTournamentsParams,
   TournamentDto[],
-  ApiErrorResponse
+  ApiErrorResponse | RateLimitException
 >({
   async handler({ query }) {
     const response = await requestFx({
-      path: '/tournaments',
+      path: `/tournaments`,
       method: 'get',
       query,
     });
 
     if (response.status >= 400) {
-      throw response.body as ApiErrorResponse;
+      throw response.body as ApiErrorResponse | RateLimitException;
     }
 
     return response.body as TournamentDto[];
@@ -300,38 +314,38 @@ export type TournamentCreateTournamentParams = { data: TournamentCreateDto };
 export const tournamentCreateTournamentFx = createEffect<
   TournamentCreateTournamentParams,
   TournamentDto,
-  ApiValidationErrorResponse | ApiErrorResponse
+  ApiValidationErrorResponse | ApiErrorResponse | RateLimitException
 >({
   async handler({ data }) {
     const response = await requestFx({
-      path: '/tournaments',
+      path: `/tournaments`,
       method: 'post',
       body: data,
     });
 
     if (response.status >= 400) {
-      throw response.body as ApiValidationErrorResponse | ApiErrorResponse;
+      throw response.body as ApiValidationErrorResponse | ApiErrorResponse | RateLimitException;
     }
 
     return response.body as TournamentDto;
   },
 });
 
-export type TournamentGetLatestAvailableTournamentParams = void;
+export type TournamentGetTournamentByIdParams = { id: string };
 
-export const tournamentGetLatestAvailableTournamentFx = createEffect<
-  TournamentGetLatestAvailableTournamentParams,
+export const tournamentGetTournamentByIdFx = createEffect<
+  TournamentGetTournamentByIdParams,
   TournamentDto,
-  ApiErrorResponse
+  ApiErrorResponse | RateLimitException
 >({
-  async handler() {
+  async handler({ id }) {
     const response = await requestFx({
-      path: '/tournaments/latest-available',
+      path: `/tournaments/${id}`,
       method: 'get',
     });
 
     if (response.status >= 400) {
-      throw response.body as ApiErrorResponse;
+      throw response.body as ApiErrorResponse | RateLimitException;
     }
 
     return response.body as TournamentDto;
