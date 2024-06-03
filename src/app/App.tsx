@@ -5,6 +5,7 @@ import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { RouterProvider } from 'atomic-router-react';
+import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import { Suspense } from 'react';
 
@@ -16,6 +17,8 @@ import { Footer } from '@drag/widgets/footer';
 import { Header } from '@drag/widgets/header';
 
 import './styles/index.css';
+
+dayjs.locale('ru');
 
 const theme = createTheme({});
 
