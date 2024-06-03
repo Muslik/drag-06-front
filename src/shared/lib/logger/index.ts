@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const createLogger = () => ({
   info: (...messages: unknown[]) => console.info(...messages),
   warn: (...messages: unknown[]) => console.warn(...messages),

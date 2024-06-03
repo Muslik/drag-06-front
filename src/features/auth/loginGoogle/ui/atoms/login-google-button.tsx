@@ -1,6 +1,6 @@
-import GoogleIcon from '@mui/icons-material/Google';
-import { IconButton } from '@mui/material';
+import { Button } from '@mantine/core';
 import { useGoogleLogin } from '@react-oauth/google';
+import { IconBrandGoogle } from '@tabler/icons-react';
 import { useUnit } from 'effector-react';
 
 import { loginGoogleDone } from '@drag/features/auth/loginGoogle';
@@ -13,13 +13,12 @@ export const LoginGoogleButton = () => {
   });
 
   return (
-    <IconButton
-      sx={{ width: '50px', height: '50px' }}
+    <Button
       color="inherit"
       onClick={() => login()}
       disabled={false}
-    >
-      <GoogleIcon />
-    </IconButton>
+      rightSection={<IconBrandGoogle />}
+      aria-label="Войти через Google"
+    />
   );
 };

@@ -49,6 +49,7 @@ export type RequestValidationErrorDto = {
   arrayMaxSize?: string;
   arrayMinSize?: string;
   arrayUnique?: string;
+  arrayNotEmpty?: string;
 };
 
 export type ApiValidationErrorResponse = {
@@ -106,30 +107,18 @@ export type RefreshTokenDto = {
 export type TournamentDto = {
   /** @example "Турнир по дрег рейсингу 3й этап" */
   title: string;
-  /** @example "Турнир пройдет дома" */
+  /**
+   * @maxLength 1500
+   * @example "Турнир пройдет дома"
+   */
   description: string;
   /**
    * @format date-time
    * @example "2021-10-10T10:00:00.000Z"
    */
   startDate: string;
-  /**
-   * @format date-time
-   * @example "2021-10-10T10:00:00.000Z"
-   */
-  endRegistrationDate: string | null;
   /** @example 2000 */
-  classET10Fee: number;
-  /** @example 2000 */
-  classET11Fee: number;
-  /** @example 2000 */
-  classET12Fee: number;
-  /** @example 2000 */
-  classET13Fee: number;
-  /** @example 2000 */
-  classET14Fee: number;
-  /** @example 2000 */
-  classET15Fee: number;
+  fee: number;
   /** @example [1,2,3,4,5] */
   availableRacerNumbers: number[];
   /** @example "CREATED" */
@@ -141,37 +130,25 @@ export type TournamentDto = {
 export type TournamentCreateDto = {
   /** @example "Турнир по дрег рейсингу 3й этап" */
   title: string;
-  /** @example "Турнир пройдет дома" */
+  /**
+   * @maxLength 1500
+   * @example "Турнир пройдет дома"
+   */
   description?: string;
   /**
    * @format date-time
    * @example "2021-10-10T10:00:00.000Z"
    */
   startDate: string;
-  /**
-   * @format date-time
-   * @example "2021-10-10T10:00:00.000Z"
-   */
-  endRegistrationDate?: string | null;
   /** @example 2000 */
-  classET10Fee: number;
-  /** @example 2000 */
-  classET11Fee: number;
-  /** @example 2000 */
-  classET12Fee: number;
-  /** @example 2000 */
-  classET13Fee: number;
-  /** @example 2000 */
-  classET14Fee: number;
-  /** @example 2000 */
-  classET15Fee: number;
+  fee: number;
   /** @example [1,2,3,4,5] */
   availableRacerNumbers: number[];
   /** @example "CREATED" */
   status?: 'CREATED' | 'REGISTRATION' | 'IN_PROGRESS' | 'FINISHED';
 };
 
-type AuthSignInParams = { data: SignInDto };
+export type AuthSignInParams = { data: SignInDto };
 
 export const authSignInFx = createEffect<
   AuthSignInParams,
@@ -193,7 +170,7 @@ export const authSignInFx = createEffect<
   },
 });
 
-type AuthJwtSignInParams = { data: SignInDto };
+export type AuthJwtSignInParams = { data: SignInDto };
 
 export const authJwtSignInFx = createEffect<
   AuthJwtSignInParams,
@@ -215,7 +192,7 @@ export const authJwtSignInFx = createEffect<
   },
 });
 
-type AuthRefreshTokensParams = { data: RefreshTokenDto };
+export type AuthRefreshTokensParams = { data: RefreshTokenDto };
 
 export const authRefreshTokensFx = createEffect<
   AuthRefreshTokensParams,
@@ -237,7 +214,7 @@ export const authRefreshTokensFx = createEffect<
   },
 });
 
-type AuthMeParams = void;
+export type AuthMeParams = void;
 
 export const authMeFx = createEffect<AuthMeParams, UserAuthDto, ApiErrorResponse>({
   async handler() {
@@ -254,7 +231,7 @@ export const authMeFx = createEffect<AuthMeParams, UserAuthDto, ApiErrorResponse
   },
 });
 
-type AuthLogoutParams = void;
+export type AuthLogoutParams = void;
 
 export const authLogoutFx = createEffect<AuthLogoutParams, void, ApiErrorResponse>({
   async handler() {
@@ -271,7 +248,7 @@ export const authLogoutFx = createEffect<AuthLogoutParams, void, ApiErrorRespons
   },
 });
 
-type UsersGetUsersParams = void;
+export type UsersGetUsersParams = void;
 
 export const usersGetUsersFx = createEffect<UsersGetUsersParams, void, any>({
   async handler() {
@@ -288,33 +265,42 @@ export const usersGetUsersFx = createEffect<UsersGetUsersParams, void, any>({
   },
 });
 
-type TournamentGetTournamentsParams = void;
+export type TournamentGetTournamentsParams = {
+  query?: {
+    'take'?: string | number;
+    'skip'?: string | number;
+    'order[direction]'?: 'asc' | 'desc';
+    'order[field]'?: 'createdAt' | 'status' | 'startDate';
+    'where[status]'?: 'CREATED' | 'REGISTRATION' | 'IN_PROGRESS' | 'FINISHED';
+  };
+};
 
 export const tournamentGetTournamentsFx = createEffect<
   TournamentGetTournamentsParams,
   TournamentDto[],
-  TournamentDto
+  ApiErrorResponse
 >({
-  async handler() {
+  async handler({ query }) {
     const response = await requestFx({
       path: '/tournaments',
       method: 'get',
+      query,
     });
 
     if (response.status >= 400) {
-      throw response.body as TournamentDto;
+      throw response.body as ApiErrorResponse;
     }
 
     return response.body as TournamentDto[];
   },
 });
 
-type TournamentCreateTournamentParams = { data: TournamentCreateDto };
+export type TournamentCreateTournamentParams = { data: TournamentCreateDto };
 
 export const tournamentCreateTournamentFx = createEffect<
   TournamentCreateTournamentParams,
   TournamentDto,
-  ApiValidationErrorResponse
+  ApiValidationErrorResponse | ApiErrorResponse
 >({
   async handler({ data }) {
     const response = await requestFx({
@@ -324,7 +310,28 @@ export const tournamentCreateTournamentFx = createEffect<
     });
 
     if (response.status >= 400) {
-      throw response.body as ApiValidationErrorResponse;
+      throw response.body as ApiValidationErrorResponse | ApiErrorResponse;
+    }
+
+    return response.body as TournamentDto;
+  },
+});
+
+export type TournamentGetLatestAvailableTournamentParams = void;
+
+export const tournamentGetLatestAvailableTournamentFx = createEffect<
+  TournamentGetLatestAvailableTournamentParams,
+  TournamentDto,
+  ApiErrorResponse
+>({
+  async handler() {
+    const response = await requestFx({
+      path: '/tournaments/latest-available',
+      method: 'get',
+    });
+
+    if (response.status >= 400) {
+      throw response.body as ApiErrorResponse;
     }
 
     return response.body as TournamentDto;

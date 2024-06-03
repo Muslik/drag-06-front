@@ -36,7 +36,7 @@ function getRequestParamsType() {
     return 'void';
 }
 
-const requestParamsType = `type ${typeParamsVariableName} = ${getRequestParamsType()};\n`
+const requestParamsType = `export type ${typeParamsVariableName} = ${getRequestParamsType()};\n`
 
 const parameterNames = wrapperArgs.map(argToParameterName).join(',')
 
