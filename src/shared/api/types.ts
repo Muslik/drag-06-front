@@ -4,6 +4,7 @@ export type Request = {
   body?: Record<string, unknown> | null;
   query?: Record<string, string | number>;
   headers?: Record<string, string>;
+  signal?: AbortSignal;
 };
 
 export type Answer = {

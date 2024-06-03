@@ -1,13 +1,10 @@
 import type { Answer, Request } from '@drag/shared/api';
 import { env } from '@drag/shared/config';
 
-import { sendRequestFx } from './base';
-
-sendRequestFx.use(clientRequest);
-
-async function clientRequest<Response = unknown>({
+export async function clientRequest<Response = unknown>({
   path,
   method,
+  signal,
   ...options
 }: Request): Promise<Answer> {
   const headers = new Headers(options.headers);
@@ -27,6 +24,7 @@ async function clientRequest<Response = unknown>({
     body,
     headers,
     credentials: 'include',
+    signal,
   });
 
   const answer: Response = contentIs(response.headers, 'application/json')

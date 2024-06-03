@@ -1,10 +1,23 @@
+import { onAbort } from '@farfetched/core';
 import { attach, createEffect, createEvent, restore } from 'effector';
 
 import { Answer, Request } from '@drag/shared/api';
 import { env } from '@drag/shared/config';
 import { logger } from '@drag/shared/lib/logger';
 
-export const sendRequestFx = createEffect<Request, Answer, Answer>();
+import { clientRequest } from './client';
+
+export const sendRequestFx = createEffect<Request, Answer, Answer>({
+  handler: async (params) => {
+    const abortController = new AbortController();
+
+    onAbort(() => {
+      abortController.abort();
+    });
+
+    return clientRequest({ ...params, signal: abortController.signal });
+  },
+});
 
 export const setCookiesForRequest = createEvent<string>();
 export const $cookiesForRequest = restore(setCookiesForRequest, '');
