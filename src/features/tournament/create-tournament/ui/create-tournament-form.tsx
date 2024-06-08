@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Checkbox, LoadingOverlay, Paper, Textarea, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { IconCurrencyRubel } from '@tabler/icons-react';
-import cx from 'clsx';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useUnit } from 'effector-react';
 import { Controller, useForm } from 'react-hook-form';
@@ -10,7 +10,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { MAX_DESCRIPTION_LENGTH } from '../config';
 import { creationCancelled, Form, formSchema, formSubmitted, tournamentMutation } from '../model';
 
-export const CreateTournamentForm = ({ className }: { className?: string }) => {
+export function CreateTournamentForm ({ className }: { className?: string }) {
   const {
     formState: { errors },
     control,
@@ -38,7 +38,7 @@ export const CreateTournamentForm = ({ className }: { className?: string }) => {
       withBorder={true}
       p="lg"
       radius="md"
-      className={cx(className)}
+      className={clsx(className)}
       onSubmit={handleSubmit(submitted)}
       pos="relative"
     >

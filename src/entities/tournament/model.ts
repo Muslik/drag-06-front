@@ -25,6 +25,6 @@ concurrency(tournamentQuery, {
   strategy: 'TAKE_LATEST',
 });
 
-export const $openedTournament = tournamentsQuery.$data.map(
+export const $openedToRegisterTournament = tournamentsQuery.$data.map(
   (tournaments) => tournaments.find((tournament) => tournament.status === 'REGISTRATION') ?? null,
 );

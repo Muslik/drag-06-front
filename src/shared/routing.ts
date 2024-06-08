@@ -17,15 +17,17 @@ export const routes = {
     register: createRoute<{ tournamentId: string }>(),
     create: createRoute(),
   },
+  signIn: createRoute(),
   notFound: createRoute(),
 };
 
 const routesMap: UnmappedRouteObject<any>[] = [
   { path: '/', route: routes.home },
+  { path: '/sign-in', route: routes.signIn },
   { path: '/tournaments', route: routes.tournament.all },
-  { path: '/tournaments/create', route: routes.tournament.create },
   { path: '/tournaments/:tournamentId', route: routes.tournament.current },
   { path: '/tournaments/:tournamentId/register', route: routes.tournament.register },
+  { path: '/tournaments-create', route: routes.tournament.create },
   { path: '/404', route: routes.notFound },
 ];
 
@@ -42,4 +44,3 @@ sample({
   fn: () => createBrowserHistory(),
   target: router.setHistory,
 });
-

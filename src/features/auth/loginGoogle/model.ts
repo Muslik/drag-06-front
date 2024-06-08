@@ -1,22 +1,19 @@
+import { createQuery } from '@farfetched/core';
 import { TokenResponse } from '@react-oauth/google';
-import { createEvent, sample, attach } from 'effector';
+import { createEvent, sample } from 'effector';
 
-import { setSession } from '@drag/entities/session';
 import { internalApi } from '@drag/shared/api';
 
 export const loginGoogleDone = createEvent<TokenResponse>();
 
-const loginGoogleFx = attach({ effect: internalApi.authSignInFx });
+export const signInGoogleQuery = createQuery({
+  effect: internalApi.authSignInGoogleFx,
+});
 
 sample({
   clock: loginGoogleDone,
   fn: (response) => {
-    return { data: { token: response.access_token, provider: 'google' as const } };
+    return { data: { token: response.access_token } };
   },
-  target: loginGoogleFx,
-});
-
-sample({
-  clock: loginGoogleFx.doneData,
-  target: setSession,
+  target: signInGoogleQuery.start,
 });

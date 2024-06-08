@@ -1,10 +1,10 @@
+import { Link } from 'atomic-router-react';
 import clsx from 'clsx';
 import { ReactNode } from 'react';
 
 import invertedLogo from '@drag/shared/assets/logo-inverted.svg';
 import logo from '@drag/shared/assets/logo.svg';
 import { routes } from '@drag/shared/routing';
-import { Link } from 'atomic-router-react';
 
 type Props = {
   className?: string;
@@ -12,18 +12,14 @@ type Props = {
   isInverted?: boolean;
 };
 
-export const Logo = ({ className, type = 'both', isInverted = false, }: Props) => {
+export function Logo({ className, type = 'both', isInverted = false }: Props) {
   const LinkWrapper = ({ children }: { children: ReactNode }) => (
     <Link
       to={routes.home}
-      /* sx={{ */
-      /*   textDecoration: 'none', */
-      /*   color: isInverted ? 'white' : 'black', */
-      /*   fontWeight: 700, */
-      /*   fontSize: '20px', */
-      /*   ...sx, */
-      /* }} */
-      className={clsx('flex gap-4 items-center', className)}
+      className={clsx(
+        'flex gap-4 items-center text-black no-underline text-3xl font-bold',
+        className,
+      )}
     >
       {children}
     </Link>
@@ -47,4 +43,4 @@ export const Logo = ({ className, type = 'both', isInverted = false, }: Props) =
       {textNode}
     </LinkWrapper>
   );
-};
+}

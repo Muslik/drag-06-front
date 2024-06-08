@@ -1,11 +1,12 @@
 import { Button } from '@mantine/core';
 import { useGoogleLogin } from '@react-oauth/google';
-import { IconBrandGoogle } from '@tabler/icons-react';
+import { IconBrandGoogleFilled } from '@tabler/icons-react';
+import clsx from 'clsx';
 import { useUnit } from 'effector-react';
 
-import { loginGoogleDone } from '@drag/features/auth/loginGoogle';
+import { loginGoogleDone } from './model';
 
-export const LoginGoogleButton = () => {
+export const LoginGoogleButton = ({ className }: { className?: string }) => {
   const [handleLogin] = useUnit([loginGoogleDone]);
 
   const login = useGoogleLogin({
@@ -14,11 +15,14 @@ export const LoginGoogleButton = () => {
 
   return (
     <Button
-      color="inherit"
+      className={clsx("h-10 w-[234px] text-base", className)}
+      color="red"
       onClick={() => login()}
       disabled={false}
-      rightSection={<IconBrandGoogle />}
+      rightSection={<IconBrandGoogleFilled />}
       aria-label="Войти через Google"
-    />
+    >
+      Войти через Google
+    </Button>
   );
 };

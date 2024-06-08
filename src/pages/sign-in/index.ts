@@ -3,13 +3,13 @@ import { lazy } from 'react';
 
 import { PageLoader } from '@drag/shared/ui';
 
-import { authorizedRoute } from './model';
+import { currentRoute, anonymousRoute } from './model';
 
-export const TournamentCreateRoute = {
+export const SignInRoute = {
   view: createRouteView({
-    route: authorizedRoute,
-    view: lazy(() => import('./tournament-create-page')),
+    route: anonymousRoute,
+    view: lazy(() => import('./sign-in-page')),
     otherwise: PageLoader,
   }),
-  route: authorizedRoute,
+  route: currentRoute,
 };

@@ -1,3 +1,4 @@
-export * from './ui/atoms';
+export { LoginGoogleButton } from './login-google-button';
 
-export { loginGoogleDone } from './model';
+export * as loginGoogleModel from './model';
+

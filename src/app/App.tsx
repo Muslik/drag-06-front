@@ -16,6 +16,8 @@ import { router } from '@drag/shared/routing';
 import { Footer } from '@drag/widgets/footer';
 import { Header } from '@drag/widgets/header';
 
+import './model';
+
 import './styles/index.css';
 
 dayjs.locale('ru');
